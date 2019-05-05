@@ -1,20 +1,96 @@
 package sample;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class Products {
-    private LinkedList<Product> all = new LinkedList<Product>();
+    private List<Product> all = new LinkedList<Product>();
+    private int currentPage = 0;
+    private int noteNum = 5;
 
     public void addProduct(Product obj) {
         all.add(obj);
     }
 
-    public void addProducts(LinkedList<Product> objects){
-        all.addAll(objects);
+    public void addProducts(List<Product> obj){
+        all.addAll(obj);
     }
 
-    public LinkedList<Product> searchProductSet(String parameter, Product template) {
-        LinkedList<Product> rezult = new LinkedList<>();
+    public List<Product> getAll(){
+        return all;
+    }
+
+    public Product get(int index){
+        return all.get(index);
+    }
+
+    public List<Product> getCurrentPage(){
+        if (currentPage < pageNum() - 1){
+            return getProducts(currentPage*noteNum, currentPage*noteNum + 5);
+        }
+        else{
+            return getProducts(currentPage*noteNum, all.size());
+        }
+    }
+
+    public List<Product> getNextPage(){
+        if (currentPage + 1 < pageNum()){
+            currentPage++;
+        }
+        return getCurrentPage();
+    }
+
+    public List<Product> getPrevPage(){
+        if (currentPage - 1 >= 0){
+            currentPage--;
+        }
+        return getCurrentPage();
+    }
+
+    public List<Product> getBeginPage(){
+        currentPage = 0;
+        return getCurrentPage();
+    }
+
+    public List<Product> getEndPage(){
+        currentPage = pageNum() - 1;
+        return getCurrentPage();
+    }
+
+    public List<Product> setNoteNum(int index){
+        noteNum = index;
+        return getCurrentPage();
+    }
+
+    private int pageNum(){
+        if (all.size() % noteNum == 0){
+            return all.size()/noteNum;
+        }
+        else{
+            return all.size()/noteNum + 1;
+        }
+    }
+
+    private List<Product> getProducts(int start, int finish){
+        List<Product> rezult = new LinkedList<Product>();
+        if (start >= 0 && finish <= all.size() && start <= finish){
+            for (int i = start; i < finish; i++){
+                rezult.add(all.get(i));
+            }
+        }
+        return rezult;
+    }
+
+    public int size(){
+        return all.size();
+    }
+
+    public void clear(){
+        all.clear();
+    }
+
+    public List<Product> searchProductSet(String parameter, Product template) {
+        List<Product> rezult = new LinkedList<Product>();
         if (parameter.equals("productName")) {
             for (Product obj : all) {
                 if (template.getProductName().equals(obj.getProductName())) {
@@ -54,7 +130,7 @@ public class Products {
     }
 
     public void removeProductSet(String parameter, Product template) {
-        LinkedList<Product> queryset = searchProductSet(parameter, template);
+        List<Product> queryset = searchProductSet(parameter, template);
         for (Product obj : queryset) all.remove(obj);
     }
 }

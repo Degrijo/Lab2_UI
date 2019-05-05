@@ -8,51 +8,43 @@ public class Product {
     private int productNumber;
     private String address;
 
-    public Product(String productName, String producerName, int producerId, int productNumber, String address){
-        this.productName = productName;
-        this.producerName = producerName;
-        this.producerId = producerId;
-        this.productNumber = productNumber;
-        this.address = address;
-    }
-
-    protected void setProductName(String productName) {
+    public void setProductName(String productName) {
         this.productName = productName;
     }
 
-    protected String getProductName() {
+    public String getProductName() {
         return productName;
     }
 
-    protected void setProducerName(String producerName) {
+    public void setProducerName(String producerName) {
         this.producerName = producerName;
     }
 
-    protected String getProducerName() {
+    public String getProducerName() {
         return producerName;
     }
 
-    protected void setProducerId(int userNumber) {
+    public void setProducerId(int userNumber) {
         this.producerId = userNumber;
     }
 
-    protected int getProducerId() {
+    public int getProducerId() {
         return producerId;
     }
 
-    protected void setProductNumber(int productNumber) {
+    public void setProductNumber(int productNumber) {
         this.productNumber = productNumber;
     }
 
-    protected int getProductNumber() {
+    public int getProductNumber() {
         return productNumber;
     }
 
-    protected void setAddress(String address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 
-    protected String getAddress() {
+    public String getAddress() {
         return address;
     }
 }
