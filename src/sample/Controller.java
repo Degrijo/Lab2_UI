@@ -2,7 +2,8 @@ package sample;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.w3c.dom.Attr;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import javax.xml.parsers.DocumentBuilder;
@@ -12,12 +13,12 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
-import java.util.List;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 public class Controller {
     private Products model = new Products();
+    private Products dialogModel = new Products();
 
     public ObservableList<Product> getModel(){
         return FXCollections.observableList(model.getAll());
@@ -67,65 +68,112 @@ public class Controller {
         return FXCollections.observableList(model.setNoteNum(index));
     }
 
+    public ObservableList<Product> getCurrentDialofPage(){
+        return FXCollections.observableList(dialogModel.getCurrentPage());
+    }
+
+    public ObservableList<Product> getBeginDialogPage(){
+        return FXCollections.observableList(dialogModel.getBeginPage());
+    }
+
+    public ObservableList<Product> getPrevDialogPage(){
+        return FXCollections.observableList(dialogModel.getPrevPage());
+    }
+
+    public ObservableList<Product> getNextDialogPage(){
+        return FXCollections.observableList(dialogModel.getNextPage());
+    }
+
+    public ObservableList<Product> getEndDialogPage(){
+        return FXCollections.observableList(dialogModel.getEndPage());
+    }
+
+    public ObservableList<Product> setNoteNumDialog(int index){
+        return FXCollections.observableList(dialogModel.setNoteNum(index));
+    }
+
+    public void clearDialogModel(){ dialogModel.clear(); }
+
     public void clearModel(){ model.clear(); }
 
-    public void saveFile(){
+    public int getNodeNumber(){
+        return model.size();
+    }
+
+    public int getNodeNumberDialog(){
+        return dialogModel.size();
+    }
+
+    public void saveFile(Stage stage){
         try {
             DocumentBuilderFactory dbFactory =
                     DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.newDocument();
-            Element rootElement = doc.createElement("products");
-            doc.appendChild(rootElement);
+            Element root = doc.createElement("products");
+            doc.appendChild(root);
             for (int i = 0; i < model.size(); i++){
                 Element element = doc.createElement("product");
-                doc.appendChild(element);
-                Attr attr1 = doc.createAttribute("productName");
-                Attr attr2 = doc.createAttribute("producerName");
-                Attr attr3 = doc.createAttribute("producerId");
-                Attr attr4 = doc.createAttribute("productNumber");
-                Attr attr5 = doc.createAttribute("address");
-                attr1.setValue(model.get(i).getProductName());
-                attr2.setValue(model.get(i).getProducerName());
-                attr3.setValue(Integer.toString(model.get(i).getProducerId()));
-                attr4.setValue(Integer.toString(model.get(i).getProductNumber()));
-                attr5.setValue(model.get(i).getAddress());
-                element.setAttributeNode(attr1);
-                element.setAttributeNode(attr2);
-                element.setAttributeNode(attr3);
-                element.setAttributeNode(attr4);
-                element.setAttributeNode(attr5);
+                Element productName = doc.createElement("productName");
+                productName.appendChild(doc.createTextNode(model.get(i).getProductName()));
+                element.appendChild(productName);
+                Element producerName = doc.createElement("producerName");
+                producerName.appendChild(doc.createTextNode(model.get(i).getProducerName()));
+                element.appendChild(producerName);
+                Element producerId = doc.createElement("producerId");
+                producerId.appendChild(doc.createTextNode(Integer.toString(model.get(i).getProducerId())));
+                element.appendChild(producerId);
+                Element productNumber = doc.createElement("productNumber");
+                productNumber.appendChild(doc.createTextNode(Integer.toString(model.get(i).getProductNumber())));
+                element.appendChild(productNumber);
+                Element address = doc.createElement("address");
+                address.appendChild(doc.createTextNode(model.get(i).getAddress()));
+                element.appendChild(address);
+                root.appendChild(element);
             }
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File("C:\\Users\\degri\\IdeaProjects\\Ppvis_2\\loads\\test.xml"));
-            transformer.transform(source, result);
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Select directory for save");
+            fileChooser.setInitialFileName("products");
+            fileChooser.setInitialDirectory(new File("C:\\Users\\degri\\IdeaProjects\\Ppvis_2\\loads"));
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML", "*.xml"));
+            File file = fileChooser.showSaveDialog(stage);
+            if (file != null){
+                StreamResult result = new StreamResult(file);
+                transformer.transform(source, result);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void openFile(){
-        try {
-            SAXParserFactory factory = SAXParserFactory.newInstance();
-            SAXParser saxParser = factory.newSAXParser();
-            MyHandler handler = new MyHandler();
-            saxParser.parse("c:\\file.xml", handler);
-            List<Product> objects = handler.getProducts();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            // очистить текущую модель и загрузить полученный лист
+    public void openFile(Stage stage){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select file for open");
+        fileChooser.setInitialDirectory(new File("C:\\Users\\degri\\IdeaProjects\\Ppvis_2\\loads"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML", "*.xml"));
+        File file = fileChooser.showOpenDialog(stage);
+        if (file != null) {
+            try {
+                SAXParserFactory factory = SAXParserFactory.newInstance();
+                SAXParser saxParser = factory.newSAXParser();
+                MyHandler handler = new MyHandler();
+                saxParser.parse(file, handler);
+                model.clear();
+                model.addProducts(handler.getProducts());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public ObservableList<Product> searchRecords(String parameter, Product template){
-        return FXCollections.observableList(model.searchProductSet(parameter, template));
+    public void searchRecords(String parameter, Product template){
+        dialogModel.addProducts(model.searchProductSet(parameter, template));
     }
 
-    public void removeRecords(String parameter, Product template){
-        model.removeProductSet(parameter, template);
+    public int removeRecords(String parameter, Product template){
+        return model.removeProductSet(parameter, template);
     }
 }

@@ -26,7 +26,7 @@ public class Products {
 
     public List<Product> getCurrentPage(){
         if (currentPage < pageNum() - 1){
-            return getProducts(currentPage*noteNum, currentPage*noteNum + 5);
+            return getProducts(currentPage*noteNum, currentPage*noteNum + noteNum);
         }
         else{
             return getProducts(currentPage*noteNum, all.size());
@@ -91,37 +91,31 @@ public class Products {
 
     public List<Product> searchProductSet(String parameter, Product template) {
         List<Product> rezult = new LinkedList<Product>();
-        if (parameter.equals("productName")) {
+        System.out.println("Search"+all.get(0));
+        if (parameter.equals("by name of the product")) {
             for (Product obj : all) {
                 if (template.getProductName().equals(obj.getProductName())) {
                     rezult.add(obj);
                 }
             }
         }
-        if (parameter.equals("producerName")) {
+        if (parameter.equals("by name of the producer")) {
             for (Product obj : all) {
                 if (template.getProducerName().equals(obj.getProducerName())) {
                     rezult.add(obj);
                 }
             }
         }
-        if (parameter.equals("producerId")) {
+        if (parameter.equals("by the producer id")) {
             for (Product obj : all) {
                 if (template.getProducerId() == obj.getProducerId()) {
                     rezult.add(obj);
                 }
             }
         }
-        if (parameter.equals("productNumber")) {
+        if (parameter.equals("by the number of the product")) {
             for (Product obj : all) {
                 if (template.getProductNumber() == obj.getProductNumber()) {
-                    rezult.add(obj);
-                }
-            }
-        }
-        if (parameter.equals("address")) {
-            for (Product obj : all) {
-                if (template.getAddress().equals(obj.getAddress())) {
                     rezult.add(obj);
                 }
             }
@@ -129,8 +123,11 @@ public class Products {
         return rezult;
     }
 
-    public void removeProductSet(String parameter, Product template) {
+    public int removeProductSet(String parameter, Product template) {
         List<Product> queryset = searchProductSet(parameter, template);
-        for (Product obj : queryset) all.remove(obj);
+        for (Product obj : queryset){
+            all.remove(obj);
+        }
+        return queryset.size();
     }
 }

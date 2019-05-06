@@ -10,55 +10,56 @@ import java.util.List;
 public class MyHandler extends DefaultHandler {
     private List<Product> products = new LinkedList<>();
     private Product product;
-    private StringBuilder data;
-    private boolean attr1 = false;
-    private boolean attr2 = false;
-    private boolean attr3 = false;
-    private boolean attr4 = false;
-    private boolean attr5 = false;
+    private boolean productName = false;
+    private boolean producerName = false;
+    private boolean producerId = false;
+    private boolean productNumber = false;
+    private boolean address = false;
 
     @Override
     public void startElement(String uri, String localName,String qName,
             Attributes attributes) throws SAXException {
-        product = new Product();
-        if (qName.equalsIgnoreCase("productName")) {
-            attr1 = true;
+        if (qName.equalsIgnoreCase("product")){
+            product = new Product();
+        } else if (qName.equalsIgnoreCase("productName")) {
+            productName = true;
         } else if (qName.equalsIgnoreCase("producerName")) {
-            attr2 = true;
+            producerName = true;
         } else if (qName.equalsIgnoreCase("producerId")) {
-            attr3 = true;
+            producerId = true;
         } else if (qName.equalsIgnoreCase("productNumber")) {
-            attr4 = true;
+            productNumber = true;
         } else if (qName.equalsIgnoreCase("address")) {
-            attr5 = true;
+            address = true;
         }
-        data = new StringBuilder();
     }
 
     @Override
     public void endElement(String uri, String localName,String qName){
-        if (attr1){
-            product.setProductName(data.toString());
-            attr1 = false;
-        } else if (attr2){
-            product.setProducerName(data.toString());
-            attr2 = false;
-        } else if (attr3){
-            product.setProducerId(Integer.parseInt(data.toString()));
-            attr3 = false;
-        } else if (attr4){
-            product.setProductNumber(Integer.parseInt(data.toString()));
-            attr4 = false;
-        } else if (attr5){
-            product.setAddress(data.toString());
-            attr5 = false;
+        if (qName.equalsIgnoreCase("product")){
+            products.add(product);
         }
     }
 
     @Override
     public void characters(char ch[], int start, int length) throws SAXException {
-        data.append(new String(ch, start, length));
-        System.out.println(products);
+        new String(ch, start, length);
+        if (productName){
+            product.setProductName(new String(ch, start, length));
+            productName = false;
+        } else if (producerName){
+            product.setProducerName(new String(ch, start, length));
+            producerName = false;
+        } else if (producerId){
+            product.setProducerId(Integer.parseInt(new String(ch, start, length)));
+            producerId = false;
+        } else if (productNumber){
+            product.setProductNumber(Integer.parseInt(new String(ch, start, length)));
+            productNumber = false;
+        } else if (address){
+            product.setAddress(new String(ch, start, length));
+            address = false;
+        }
     }
 
     public List<Product> getProducts() {
