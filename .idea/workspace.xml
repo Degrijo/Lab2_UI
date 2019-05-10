@@ -1,29 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="One moment ready version. To fix Saving and check Loading">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Controller.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Controller.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main$10.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main$10.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main$11.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main$11.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main$12.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main$12.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main$13.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main$13.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main$5.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main$6.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main$7.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main$8.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main$8.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main$9.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main$9.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Products.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Ppvis_2/sample/Products.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/MyHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/MyHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/Products.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Products.java" afterDir="false" />
-    </list>
+    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="Final version" />
     <ignored path="JavaFxApplication.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -83,7 +61,7 @@
         <entry file="file://$PROJECT_DIR$/src/sample/Main.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="142">
-              <caret line="453" column="83" selection-start-line="453" selection-start-column="83" selection-end-line="453" selection-end-column="83" />
+              <caret line="468" column="69" selection-start-line="468" selection-start-column="69" selection-end-line="468" selection-end-column="69" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#25281#25282#0" expanded="true" />
@@ -365,7 +343,14 @@
       <option name="project" value="LOCAL" />
       <updated>1557075372954</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Final version">
+      <created>1557134293739</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1557134293739</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -395,7 +380,7 @@
       <window_info anchor="bottom" id="Profiler" order="11" />
       <window_info anchor="bottom" id="Event Log" order="12" />
       <window_info anchor="bottom" id="Messages" order="13" weight="0.3286119" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="14" visible="true" weight="0.3286119" />
+      <window_info anchor="bottom" id="Terminal" order="14" weight="0.3286119" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24966443" />
@@ -448,7 +433,8 @@
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="true" />
     <option name="INCLUDE_TEXT_INTO_SHELF" value="false" />
     <MESSAGE value="One moment ready version. To fix Saving and check Loading" />
-    <option name="LAST_COMMIT_MESSAGE" value="One moment ready version. To fix Saving and check Loading" />
+    <MESSAGE value="Final version" />
+    <option name="LAST_COMMIT_MESSAGE" value="Final version" />
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
@@ -553,7 +539,7 @@
     <entry file="file://$PROJECT_DIR$/src/sample/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="142">
-          <caret line="453" column="83" selection-start-line="453" selection-start-column="83" selection-end-line="453" selection-end-column="83" />
+          <caret line="468" column="69" selection-start-line="468" selection-start-column="69" selection-end-line="468" selection-end-column="69" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#25281#25282#0" expanded="true" />
