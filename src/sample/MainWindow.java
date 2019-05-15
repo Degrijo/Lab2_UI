@@ -8,56 +8,34 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.util.List;
 
-public class Main extends Application {
+
+public class MainWindow extends Application {
 
     private Controller controller = new Controller();
+    private TableComponent tabl = new TableComponent();
 
     @Override
     public void start(Stage primaryStage) {
-        TableView<Product> tabl = new TableView<>();
-        tabl.setBackground(new Background(new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY)));
-        TableColumn<Product, String> tablcol1 = new TableColumn<>("Product name");
-        TableColumn<Product, String> tablcol2 = new TableColumn<>("Producer name");
-        TableColumn<Product, String> tablcol3 = new TableColumn<>("Producer id");
-        TableColumn<Product, String> tablcol4 = new TableColumn<>("Product number");
-        TableColumn<Product, String> tablcol5 = new TableColumn<>("Address");
-        tabl.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        tablcol1.setMaxWidth(1f * Integer.MAX_VALUE * 20);
-        tablcol2.setMaxWidth(1f * Integer.MAX_VALUE * 20);
-        tablcol3.setMaxWidth(1f * Integer.MAX_VALUE * 20);
-        tablcol4.setMaxWidth(1f * Integer.MAX_VALUE * 20);
-        tablcol5.setMaxWidth(1f * Integer.MAX_VALUE * 20);
-        tablcol1.setCellValueFactory(new PropertyValueFactory<>("productName"));
-        tablcol2.setCellValueFactory(new PropertyValueFactory<>("producerName"));
-        tablcol3.setCellValueFactory(new PropertyValueFactory<>("producerId"));
-        tablcol4.setCellValueFactory(new PropertyValueFactory<>("productNumber"));
-        tablcol5.setCellValueFactory(new PropertyValueFactory<>("address"));
-        tabl.getColumns().addAll(tablcol1, tablcol2, tablcol3, tablcol4, tablcol5);
-        tabl.prefWidthProperty().bind(primaryStage.widthProperty());
+        tabl.setProducts(controller.getModel());
         MenuBar menuBar = new MenuBar();
         Menu fileMenu = new Menu("File");
         Menu editMenu = new Menu("Edit");
         Menu searchMenu = new Menu("Search");
         Menu removeMenu = new Menu("Remove");
         MenuItem openItem = new MenuItem("Open");
-        Button label = new Button("0");
-        label.setPrefWidth(50);
         openItem.setAccelerator(KeyCombination.keyCombination("Ctrl+O"));
         openItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 controller.openFile(primaryStage);
-                tabl.getItems().clear();
-                tabl.setItems(controller.getCurrentPage());
-                tabl.refresh();
-                label.setText(String.valueOf(controller.getNodeNumber()));
+                tabl.getBeginPage();
             }
         });
         MenuItem saveItem = new MenuItem("Save");
@@ -81,7 +59,7 @@ public class Main extends Application {
         addItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                getAddRecordDialog(tabl, label);
+                getAddRecordDialog();
             }
         });
         MenuItem clearItem = new MenuItem("Clear");
@@ -90,8 +68,6 @@ public class Main extends Application {
             @Override
             public void handle(ActionEvent event) {
                 controller.clearModel();
-                tabl.getItems().clear();
-                label.setText("0");
             }
         });
         MenuItem productNameSearch = new MenuItem("by name of the product");
@@ -131,8 +107,7 @@ public class Main extends Application {
         productNameRemove.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                getRemoveDialog("by name of the product", tabl, label);
-                label.setText(String.valueOf(controller.getNodeNumber()));
+                getRemoveDialog("by name of the product");
             }
         });
         MenuItem productNumberRemove = new MenuItem("by the number of the product");
@@ -140,8 +115,7 @@ public class Main extends Application {
         productNumberRemove.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                getRemoveDialog("by number of the product", tabl, label);
-                label.setText(String.valueOf(controller.getNodeNumber()));
+                getRemoveDialog("by number of the product");
             }
         });
         MenuItem producerNameRemove = new MenuItem("by the producer name");
@@ -149,8 +123,7 @@ public class Main extends Application {
         producerNameRemove.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                getRemoveDialog("by name of the producer", tabl, label);
-                label.setText(String.valueOf(controller.getNodeNumber()));
+                getRemoveDialog("by name of the producer");
             }
         });
         MenuItem producerIdRemove = new MenuItem("by the producer id");
@@ -158,8 +131,7 @@ public class Main extends Application {
         producerIdRemove.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                getRemoveDialog("by the producer id", tabl, label);
-                label.setText(String.valueOf(controller.getNodeNumber()));
+                getRemoveDialog("by the producer id");
             }
         });
         fileMenu.getItems().addAll(openItem, saveItem, exitItem);
@@ -168,87 +140,16 @@ public class Main extends Application {
         removeMenu.getItems().addAll(productNameRemove, productNumberRemove, producerNameRemove, producerIdRemove);
         menuBar.getMenus().addAll(fileMenu, editMenu, searchMenu, removeMenu);
         menuBar.prefWidthProperty().bind(primaryStage.widthProperty());
-        AnchorPane root = new AnchorPane();
-        HBox hb = new HBox();
-        Button begin = new Button("<<");
-        Button prev = new Button("<");
-        Button next = new Button(">");
-        Button end = new Button(">>");
-        TextField tf = new TextField("5");
-        tf.setPrefWidth(50);
-        Button but = new Button("Submit");
-        hb.getChildren().addAll(begin, prev, next, end, tf, but, label);
-        begin.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                tabl.getItems().clear();
-                tabl.setItems(controller.getBeginPage());
-                tabl.refresh();
-            }
-        });
-        prev.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                tabl.getItems().clear();
-                tabl.setItems(controller.getPrevPage());
-                tabl.refresh();
-            }
-        });
-        next.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                tabl.getItems().clear();
-                tabl.setItems(controller.getNextPage());
-                tabl.refresh();
-            }
-        });
-        end.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                tabl.getItems().clear();
-                tabl.setItems(controller.getEndPage());
-                tabl.refresh();
-            }
-        });
-        but.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    Integer.parseInt(tf.getText());
-                } catch (Exception InvocationTargetException) {
-                    mistake("Wrong type field", "Number fields should fill by integer numbers");
-                } finally {
-                    if (Integer.parseInt(tf.getText()) > 0) {
-                        tabl.getItems().clear();
-                        tabl.setItems(controller.setNoteNum(Integer.parseInt(tf.getText())));
-                        tabl.refresh();
-                    }
-                    else{
-                        mistake("Wrong type field", "Number fields should be > 0");
-                    }
-                }
-            }
-        });
-        root.getChildren().addAll(menuBar, tabl, hb);
+        AnchorPane root = tabl.getRoot();
+        root.getChildren().add(menuBar);
+        AnchorPane.setTopAnchor(menuBar,0.0);
         primaryStage.setTitle("Ppvis_2");
         root.setBackground(new Background(new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY)));
         primaryStage.setScene(new Scene(root, 1100, 600));
         primaryStage.show();
-        AnchorPane.setTopAnchor(menuBar, 0.0);
-        AnchorPane.setTopAnchor(tabl, menuBar.getHeight());
-        AnchorPane.setBottomAnchor(hb, 10.0);
-        AnchorPane.setLeftAnchor(hb, primaryStage.getWidth() / 2 - 100);
     }
 
-    private void mistake(String header, String content) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setHeaderText(header);
-        alert.setTitle("Error");
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
-
-    private void getAddRecordDialog(TableView<Product> tabl, Button label) {
+    private void getAddRecordDialog() {
         Stage dialog = new Stage();
         dialog.setTitle("Adding record");
         FlowPane dialogRoot = new FlowPane(Orientation.VERTICAL);
@@ -278,38 +179,62 @@ public class Main extends Application {
         hb4.setSpacing(10);
         hb4.getChildren().addAll(label4, tf4);
         TextField tf5 = new TextField();
+        TextField tf6 = new TextField();
+        TextField tf7 = new TextField();
         tf5.setPromptText("String");
-        Label label5 = new Label("Enter address:");
+        tf5.setPrefWidth(100);
+        tf6.setPromptText("String");
+        tf6.setPrefWidth(100);
+        tf7.setPromptText("Number");
+        tf7.setPrefWidth(50);
+        Label label5 = new Label("Enter town name:");
+        Label label6 = new Label("street:");
+        Label label7 = new Label("house number:");
         HBox hb5 = new HBox();
         hb5.setSpacing(10);
-        hb5.getChildren().addAll(label5, tf5);
+        hb5.getChildren().addAll(label5, tf5, label6, tf6, label7, tf7);
         Button but = new Button("Submit");
         but.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 if (!tf1.getText().isEmpty() || !tf2.getText().isEmpty() || !tf3.getText().isEmpty() ||
-                        !tf4.getText().isEmpty() || !tf5.getText().isEmpty()) {
+                        !tf4.getText().isEmpty() || !tf5.getText().isEmpty() || !tf6.getText().isEmpty() ||
+                        !tf7.getText().isEmpty()) {
+                    Product temp = new Product();
+                    if (!tf1.getText().isEmpty()){
+                        temp.setProductName(tf1.getText());
+                    }
+                    if (!tf2.getText().isEmpty()){
+                        temp.setProducerName(tf2.getText());
+                    }
+                    if (!tf5.getText().isEmpty()){
+                        temp.setTown(tf5.getText());
+                    }
+                    if (!tf6.getText().isEmpty()){
+                        temp.setStreet(tf6.getText());
+                    }
                     try {
                         if (!tf3.getText().isEmpty()) {
-                            Integer.parseInt(tf3.getText());
+                            temp.setProducerId(Integer.parseInt(tf3.getText()));
                         }
                         if (!tf4.getText().isEmpty()) {
-                            Integer.parseInt(tf4.getText());
+                            temp.setProductNumber(Integer.parseInt(tf4.getText()));
+                        }
+                        if (!tf7.getText().isEmpty()) {
+                            temp.setHouse(Integer.parseInt(tf7.getText()));
                         }
                     } catch (Exception InvocationTargetException) {
                         mistake("Wrong type fields", "Number fields should fill by integer numbers");
                     } finally {
-                        controller.addRecord(tf1.getText(), tf2.getText(), tf3.getText(),
-                                tf4.getText(), tf5.getText());
+                        controller.addProduct(temp);
                         tf1.clear();
                         tf2.clear();
                         tf3.clear();
                         tf4.clear();
                         tf5.clear();
-                        tabl.getItems().clear();
-                        tabl.setItems(controller.getCurrentPage());
-                        tabl.refresh();
-                        label.setText(String.valueOf(controller.getNodeNumber()));
+                        tf6.clear();
+                        tf7.clear();
+                        tabl.getPage();
                     }
                 } else {
                     mistake("Empty fields", "You should fill minimum one field for creation record");
@@ -318,7 +243,7 @@ public class Main extends Application {
         });
         dialogRoot.getChildren().addAll(hb1, hb2, hb3, hb4, hb5, but);
         dialogRoot.setBackground(new Background(new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY)));
-        Scene scene = new Scene(dialogRoot, 400, 300);
+        Scene scene = new Scene(dialogRoot, 570, 250);
         dialog.setScene(scene);
         dialog.show();
     }
@@ -326,36 +251,15 @@ public class Main extends Application {
     private void getSearchDialog(String byWhat) {
         Stage dialog = new Stage();
         dialog.setTitle("Search " + byWhat);
-        AnchorPane dialogRoot = new AnchorPane();
         TextField tf = new TextField();
-        Label label = new Label("Enter " + byWhat + ":");
-        Button labelPag = new Button("0");
+        Label label = new Label("Enter" + byWhat.substring(2) + ":");
         HBox hb = new HBox();
         hb.setSpacing(10);
         Button but = new Button("Search");
         hb.prefWidthProperty().bind(dialog.widthProperty());
-        controller.clearDialogModel();
+        TableComponent dialogTabl = new TableComponent();
+        AnchorPane dialogRoot = dialogTabl.getRoot();
         dialogRoot.setBackground(new Background(new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY)));
-        TableView<Product> tabl = new TableView<Product>();
-        tabl.setBackground(new Background(new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY)));
-        TableColumn<Product, String> tablcol1 = new TableColumn<>("Название товара");
-        TableColumn<Product, String> tablcol2 = new TableColumn<>("Название производителя");
-        TableColumn<Product, String> tablcol3 = new TableColumn<>("УНП производителя");
-        TableColumn<Product, String> tablcol4 = new TableColumn<>("Количество на складе");
-        TableColumn<Product, String> tablcol5 = new TableColumn<>("Адрес склада");
-        tabl.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        tablcol1.setMaxWidth(1f * Integer.MAX_VALUE * 20);
-        tablcol2.setMaxWidth(1f * Integer.MAX_VALUE * 20);
-        tablcol3.setMaxWidth(1f * Integer.MAX_VALUE * 20);
-        tablcol4.setMaxWidth(1f * Integer.MAX_VALUE * 20);
-        tablcol5.setMaxWidth(1f * Integer.MAX_VALUE * 20);
-        tablcol1.setCellValueFactory(new PropertyValueFactory<>("productName"));
-        tablcol2.setCellValueFactory(new PropertyValueFactory<>("producerName"));
-        tablcol3.setCellValueFactory(new PropertyValueFactory<>("producerId"));
-        tablcol4.setCellValueFactory(new PropertyValueFactory<>("productNumber"));
-        tablcol5.setCellValueFactory(new PropertyValueFactory<>("address"));
-        tabl.getColumns().addAll(tablcol1, tablcol2, tablcol3, tablcol4, tablcol5);
-        tabl.prefWidthProperty().bind(dialog.widthProperty());
         but.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -368,7 +272,7 @@ public class Main extends Application {
                         Product product = new Product();
                         product.setProducerName(tf.getText());
                         controller.searchRecords(byWhat, product);
-                    } else if (byWhat.equals("by the number of the product")) {
+                    } else if (byWhat.equals("by number of the product")) {
                         Product product = new Product();
                         try {
                             product.setProductNumber(Integer.parseInt(tf.getText()));
@@ -384,89 +288,24 @@ public class Main extends Application {
                         } catch (Exception InvocationTargetException) {
                             mistake("Wrong type field", "Number fields should fill by integer numbers");
                         } finally {
-                            controller.searchRecords(byWhat, product);
+                            List<Product> products = controller.searchRecords(byWhat, product);
+                            dialogTabl.setProducts(products);
+                            dialogTabl.getBeginPage();
                         }
                     } else {
                         mistake("Empty field", "You should input value of search parameter");
                     }
-                tabl.getItems().clear();
-                tabl.setItems(controller.getCurrentDialofPage());
-                tabl.refresh();
-                labelPag.setText(String.valueOf(controller.getNodeNumber()));
-            }
-        });
-        hb.getChildren().addAll(label, tf, but);
-        HBox pag = new HBox();
-        Button begin = new Button("<<");
-        Button prev = new Button("<");
-        Button next = new Button(">");
-        Button end = new Button(">>");
-        TextField tfPag = new TextField("5");
-        tfPag.setPrefWidth(50);
-        Button butPag = new Button("Submit");
-        pag.getChildren().addAll(begin, prev, next, end, tfPag, butPag, labelPag);
-        begin.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                tabl.getItems().clear();
-                tabl.setItems(controller.getBeginDialogPage());
-                tabl.refresh();
-            }
-        });
-        prev.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                tabl.getItems().clear();
-                tabl.setItems(controller.getPrevDialogPage());
-                tabl.refresh();
-            }
-        });
-        next.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                tabl.getItems().clear();
-                tabl.setItems(controller.getNextDialogPage());
-                tabl.refresh();
-            }
-        });
-        end.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                tabl.getItems().clear();
-                tabl.setItems(controller.getEndDialogPage());
-                tabl.refresh();
-            }
-        });
-        butPag.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    Integer.parseInt(tfPag.getText());
-                } catch (Exception InvocationTargetException) {
-                    mistake("Wrong type field", "Number fields should fill by integer numbers");
-                } finally {
-                    if (Integer.parseInt(tfPag.getText()) > 0) {
-                        tabl.getItems().clear();
-                        tabl.setItems(controller.setNoteNumDialog(Integer.parseInt(tfPag.getText())));
-                        tabl.refresh();
-                    }
-                    else{
-                        mistake("Wrong type field", "Number fields should be > 0");
-                    }
                 }
-            }
-        });
-        dialogRoot.getChildren().addAll(hb, tabl, pag);
+            });
+        hb.getChildren().addAll(label, tf, but);
+        dialogRoot.getChildren().add(hb);
         AnchorPane.setTopAnchor(hb, 0.0);
-        AnchorPane.setTopAnchor(tabl, 50.0);
-        AnchorPane.setBottomAnchor(pag, 50.0);
-        AnchorPane.setLeftAnchor(pag, dialogRoot.getWidth() / 2);
         Scene scene = new Scene(dialogRoot, 700, 700);
         dialog.setScene(scene);
         dialog.show();
     }
 
-    private void getRemoveDialog(String byWhat, TableView<Product> tabl, Button tablLab) {
+    private void getRemoveDialog(String byWhat) {
         Stage dialog = new Stage();
         dialog.setTitle("Remove " + byWhat);
         FlowPane dialogRoot = new FlowPane(Orientation.VERTICAL);
@@ -486,7 +325,6 @@ public class Main extends Application {
                     if (byWhat.equals("by name of the product")) {
                         product.setProductName(tf.getText());
                         counter = controller.removeRecords(byWhat, product);
-                        System.out.println("Counter "+counter);
                     } else if (byWhat.equals("by name of the producer")) {
                         product.setProducerName(tf.getText());
                         counter = controller.removeRecords(byWhat, product);
@@ -507,11 +345,8 @@ public class Main extends Application {
                             counter = controller.removeRecords(byWhat, product);
                         }
                     }
-                    tf.clear();
-                    tabl.setItems(controller.getCurrentPage());
-                    tabl.refresh();
+                    tabl.getBeginPage();
                     mistake("Remove massage", "Were remove "+String.valueOf(counter)+" nodes");
-                    tablLab.setText(String.valueOf(controller.getNodeNumber()));
                 } else {
                     mistake("Empty field", "You should input value of search parameter");
                 }
@@ -523,6 +358,14 @@ public class Main extends Application {
         Scene scene = new Scene(dialogRoot, 500, 100);
         dialog.setScene(scene);
         dialog.show();
+    }
+
+    private void mistake(String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setHeaderText(header);
+        alert.setTitle("Error");
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
     public static void main(String[] args) {

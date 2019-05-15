@@ -5,8 +5,6 @@ import java.util.List;
 
 public class Products {
     private List<Product> all = new LinkedList<Product>();
-    private int currentPage = 0;
-    private int noteNum = 5;
 
     public void addProduct(Product obj) {
         all.add(obj);
@@ -24,62 +22,6 @@ public class Products {
         return all.get(index);
     }
 
-    public List<Product> getCurrentPage(){
-        if (currentPage < pageNum() - 1){
-            return getProducts(currentPage*noteNum, currentPage*noteNum + noteNum);
-        }
-        else{
-            return getProducts(currentPage*noteNum, all.size());
-        }
-    }
-
-    public List<Product> getNextPage(){
-        if (currentPage + 1 < pageNum()){
-            currentPage++;
-        }
-        return getCurrentPage();
-    }
-
-    public List<Product> getPrevPage(){
-        if (currentPage - 1 >= 0){
-            currentPage--;
-        }
-        return getCurrentPage();
-    }
-
-    public List<Product> getBeginPage(){
-        currentPage = 0;
-        return getCurrentPage();
-    }
-
-    public List<Product> getEndPage(){
-        currentPage = pageNum() - 1;
-        return getCurrentPage();
-    }
-
-    public List<Product> setNoteNum(int index){
-        noteNum = index;
-        return getCurrentPage();
-    }
-
-    private int pageNum(){
-        if (all.size() % noteNum == 0){
-            return all.size()/noteNum;
-        }
-        else{
-            return all.size()/noteNum + 1;
-        }
-    }
-
-    private List<Product> getProducts(int start, int finish){
-        List<Product> rezult = new LinkedList<Product>();
-        if (start >= 0 && finish <= all.size() && start <= finish){
-            for (int i = start; i < finish; i++){
-                rezult.add(all.get(i));
-            }
-        }
-        return rezult;
-    }
 
     public int size(){
         return all.size();
@@ -91,7 +33,6 @@ public class Products {
 
     public List<Product> searchProductSet(String parameter, Product template) {
         List<Product> rezult = new LinkedList<Product>();
-        System.out.println("Search"+all.get(0));
         if (parameter.equals("by name of the product")) {
             for (Product obj : all) {
                 if (template.getProductName().equals(obj.getProductName())) {
